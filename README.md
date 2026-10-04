@@ -1,87 +1,96 @@
-# Underwood Dentist — Site Clone
+# Underwood Dentist — Site Rebuild
 
-A static snapshot of `dentistatunderwood.com.au`, reorganized for local editing.
+A clean, modern, hand-built static site for "Dentist at Underwood," rebuilt
+from scratch from a browser-saved snapshot of `dentistatunderwood.com.au`.
+No framework, no build step, no WordPress/Elementor — just semantic HTML,
+one CSS file, and one JS file.
 
 ## Structure
 
 ```
-index.html          the page
+index.html            the whole page
 assets/
-  css/               all stylesheets (including Google Fonts @font-face files)
-  js/                all scripts (including analytics/GTM bootstrap files)
-  images/            all images (png, jpg, webp, svg)
-  maps.html          the embedded Google Maps iframe target
+  css/style.css        design system + all styles (custom properties, components)
+  js/main.js            nav, mobile drawer, scroll-reveal, carousel, contact form
+  images/               all photos, case gallery, and health-fund logos
+legacy/                 the original Elementor-era files, kept for reference
+  index-original.html
+  css/, js/             the ~50 original stylesheets / ~40 scripts (unused now)
+  maps.html
 ```
 
-This was originally a browser "Save As → Webpage, Complete" capture, which
-dumps everything flat into one `..._files/` folder with mangled filenames
-(`css(1)`, `js`, `destination`, `f.txt`, etc). This project sorts those into
-`assets/css` / `assets/js` / `assets/images` and renames the ambiguous ones:
-
-| Original name | Renamed to | What it is |
-|---|---|---|
-| `css` | `fonts-alata.css` | Google Fonts `@font-face` for Alata |
-| `css(1)` | `fonts-poppins.css` | Google Fonts `@font-face` for Poppins |
-| `css(2)` | `fonts-roboto.css` | Google Fonts `@font-face` for Roboto |
-| `js` | `gtm-bootstrap-1.js` | Google Tag Manager container snippet |
-| `js(1)` | `gtm-bootstrap-2.js` | Google Tag Manager container snippet |
-| `destination` | `gtm-bootstrap-3.js` | Google Tag Manager container snippet |
-| `f.txt` | `analytics.js` | Google tag / analytics loader |
-
-Every `href`/`src` in `index.html` was rewritten to point at the new paths.
+Nothing in `legacy/` is loaded by `index.html` — it's just there in case you
+want to compare against the original or recover a specific bit of copy/markup.
+Safe to delete if you don't need it.
 
 ## Editing locally
 
-No build step — open `index.html` directly, or serve it so relative paths
-and the `maps.html` iframe behave like a real site:
+No build step. Open `index.html` directly, or serve it (recommended, so the
+Google Maps iframe and relative paths behave exactly like production):
 
 ```bash
 cd underwood-dentist-site
 python3 -m http.server 8080
-# then open http://localhost:8080
+# open http://localhost:8080
 ```
 
-The page is built with [Elementor](https://elementor.com) markup (lots of
-`data-settings` JSON blobs and per-widget generated CSS in `<style>` blocks
-inside `<head>`). Editing is just editing HTML/CSS/JS by hand — there's no
-WordPress/Elementor backend here, so widget settings panels won't work; you
-edit the rendered markup and CSS directly.
+### Design system
 
-## Known gaps (things that won't work offline)
+Everything visual is driven by CSS custom properties at the top of
+`assets/css/style.css` — change these and the whole site updates:
 
-This is a frontend-only snapshot of a WordPress + Elementor site, so anything
-that depended on the live server or third-party services is inert:
+```css
+--color-brand: #ff6600;      /* primary accent */
+--color-ink:   #16181d;      /* body text */
+--font-heading: "Poppins";   /* headings */
+--font-body:    "Inter";     /* body copy */
+--radius-md:   14px;         /* card corner radius */
+```
 
-- **Google Tag Manager / analytics** (`assets/js/gtm-bootstrap-*.js`,
-  `assets/js/analytics.js`) — loads but has nothing to report to.
-- **Call tracking script** (`assets/js/call-tracking_9.js`) — same, dead weight.
-- **HealthEngine "Book Now" widget** — the buttons wire up to
-  `#he-webplugin-anchor-95121`, which calls out to healthengine.com.au; it
-  will open the real booking page if you're online, otherwise it's a dead link.
-- **WordPress AJAX endpoints** (`admin-ajax.php` URLs baked into some
-  `data-settings` JSON, e.g. carousel/equal-height widgets) — these only
-  mattered at build time on the live server; the page doesn't call them at
-  runtime, so nothing is broken by their absence.
-- **Google Maps embed** (`assets/maps.html`) — was saved as an empty
-  `about:blank` placeholder by the browser (the real map is a cross-origin
-  iframe the save process couldn't capture). Replace it with a real
-  [Google Maps embed](https://www.google.com/maps) `<iframe src="...">` if
-  you want a working map.
-- **Icon-font glyphs for carousel arrows** — `solid.css` / `brands.css`
-  (Font Awesome) reference `../webfonts/fa-*.woff` files that were never
-  downloaded by the browser (most of the site's icons are inline SVG and
-  don't need them, but the testimonial-carousel prev/next arrows do use
-  `<i class="fas fa-angle-left">`). Fix by adding the Font Awesome CDN to
-  `index.html`:
-  ```html
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-  ```
-- **Some section background images** (the 5-column service tiles — Family
-  Dentistry, Root Canal, Teeth Whitening, etc.) are set via
-  `background-image: url(https://dentistatunderwood.com.au/...)` inside
-  `assets/css/post-3381.css` and were never downloaded locally — they'll
-  only render while you're online. Download them into `assets/images/` and
-  update those `url(...)` references if you need a fully offline copy.
-- Several `<img>` `srcset` attributes still point at the live site's CDN
-  (`dentistatunderwood.com.au/wp-content/uploads/...`) for responsive
-  variants — only the base image each `<img>` uses was downloaded locally.
+Fonts load from Google Fonts via CDN (`<link>` in `<head>`) with a system-font
+fallback stack, so the page still reads fine with no internet connection —
+it just won't have the exact webfonts.
+
+### Sections (in order)
+
+Header (sticky, with dropdown + mobile drawer) → Hero → Trust intro →
+3 alternating feature rows (care philosophy / family-friendly / payment
+plans) → About → Services grid (12 cards, hand-drawn inline SVG icons, no
+icon-font dependency) → "Why Choose Us" (4 photo cards) → Smile-transformation
+case gallery (scroll-snap carousel) → Health-fund affiliations (auto-scrolling
+logo marquee) → Appointment/contact section (info + form) → Footer (links,
+hours, map, social).
+
+### The appointment form
+
+`#appointment-form` has no backend. On submit, `assets/js/main.js` builds a
+`mailto:` link from the filled-in fields and opens the visitor's email
+client with the message pre-filled — a reasonable "it actually does
+something" behaviour for a static site. For production, wire the `<form>`
+up to a real service instead (e.g. [Formspree](https://formspree.io),
+[Netlify Forms](https://docs.netlify.com/forms/setup/), or your own API) and
+remove the JS `preventDefault()`/mailto logic.
+
+### Map
+
+The footer map is a no-API-key Google Maps embed
+(`https://www.google.com/maps?q=...&output=embed`). It's the standard
+"legacy" embed format and needs no setup, but if Google ever deprecates it,
+swap in a proper [Maps Embed API](https://developers.google.com/maps/documentation/embed/get-started)
+iframe with an API key.
+
+## Known gaps / things to add
+
+- **Service detail pages** — nav links and service cards currently point at
+  `#services` on the same page. If you want real sub-pages (e.g.
+  `/services/veneers.html`), build them and update those `href`s.
+- **Real case-gallery captions** — the carousel currently reuses generic alt
+  text ("Dental treatment case N"); add real before/after descriptions if
+  you have them.
+- **Blog / FAQ / Smile Gallery** — present as nav items in the original site
+  but not rebuilt here; add pages and link them from the header if needed.
+- Affiliation logos are a mix of PNG/WebP at inconsistent native sizes —
+  they're normalized visually via `height: 34px` + `object-fit: contain` in
+  CSS, but a few (e.g. the ClearCorrect logo, which is white-on-transparent)
+  will look faint on the light marquee background. Swap in a colour/dark
+  variant of that logo if you have one.

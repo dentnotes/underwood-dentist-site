@@ -60,7 +60,7 @@ body {
   text-rendering: optimizeLegibility;
   overflow-x: hidden;
 }
-img, picture, svg { display: block; max-width: 100%; }
+img, picture, svg, video { display: block; max-width: 100%; }
 ::selection { background: var(--color-gold-soft); color: var(--color-ink); }
 a { color: inherit; text-decoration: none; }
 button { font: inherit; cursor: pointer; }
@@ -345,7 +345,7 @@ section { padding-block: var(--space-8); }
   z-index: 0;
 }
 .hero-media .frame { position: relative; z-index: 1; overflow: hidden; aspect-ratio: 4 / 5; max-height: 760px; border-radius: var(--radius-xl); box-shadow: var(--shadow-lg); }
-.hero-media .frame img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 30%; }
+.hero-media .frame img, .hero-media .frame video { width: 100%; height: 100%; object-fit: cover; object-position: 50% 30%; }
 
 .hero-stats strong { color: var(--color-gold-dark); }
 

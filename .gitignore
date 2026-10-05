@@ -1,2 +1,8 @@
 .DS_Store
 .vercel
+
+# Raw phone footage — far too large to commit; only the trimmed/compressed
+# clip in assets/video/ is tracked.
+assets/images/*.MP4
+assets/images/*.mov
+assets/images/*.MOV

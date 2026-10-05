@@ -359,7 +359,7 @@ section { padding-block: var(--space-8); }
 .hero .hero-stats strong { color: var(--color-gold-soft); }
 .hero .hero-stats span { color: rgba(255, 255, 255, 0.7); }
 
-/* ------------------------------ Hero (framed variant — /home2.html) ------------------------------ */
+/* ------------------------------ Hero (framed video variant — homepage) ------------------------------ */
 .hero-framed { position: relative; overflow: hidden; padding-block: var(--space-8); border-bottom: 1px solid var(--color-border); }
 .hero-framed::before {
   content: "";
@@ -643,6 +643,9 @@ section { padding-block: var(--space-8); }
 @media (min-width: 760px) { .footer-grid { grid-template-columns: 1.3fr 0.8fr 1fr 1fr; } }
 .footer-grid h4 { color: #fff; font-family: var(--font-body); font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: var(--space-4); }
 .footer-about img { height: 28px; margin-bottom: var(--space-4); filter: brightness(0) invert(1); }
+.footer-memberships { margin-top: var(--space-5); }
+.footer-memberships span { display: block; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.06em; color: rgba(255, 255, 255, 0.5); margin-bottom: var(--space-2); }
+.footer-about .footer-memberships img { height: 88px; width: auto; margin: 0; filter: none; background: #fff; border-radius: var(--radius-md); padding: 0.4rem 0.6rem; }
 .footer-about p { font-size: 0.88rem; color: rgba(255, 255, 255, 0.5); }
 .footer-social { display: flex; gap: var(--space-2); margin-top: var(--space-4); }
 .footer-social a {
@@ -896,7 +899,13 @@ section { padding-block: var(--space-8); }
 
 /* ------------------------------ Team / profile cards ------------------------------ */
 .team-grid { display: grid; gap: var(--space-5); grid-template-columns: repeat(2, 1fr); }
-@media (min-width: 760px) { .team-grid { grid-template-columns: repeat(4, 1fr); } }
+@media (min-width: 760px) { .team-grid { grid-template-columns: repeat(3, 1fr); } }
+@media (min-width: 1100px) { .team-grid { grid-template-columns: repeat(5, 1fr); } }
+/* Full-bio cards (about page): max three per row, last row centred */
+.team-grid--bios { display: flex; flex-wrap: wrap; justify-content: center; }
+.team-grid--bios > .team-card { flex: 0 1 100%; }
+@media (min-width: 640px) { .team-grid--bios > .team-card { flex-basis: calc((100% - var(--space-5)) / 2); } }
+@media (min-width: 960px) { .team-grid--bios > .team-card { flex-basis: calc((100% - 2 * var(--space-5)) / 3); } }
 .team-card {
   position: relative;
   background: #fff;
@@ -921,6 +930,9 @@ section { padding-block: var(--space-8); }
   background: linear-gradient(135deg, var(--color-gold-soft), #fff);
   font-family: var(--font-display); font-size: 2.2rem; font-weight: 600; color: var(--color-gold-dark);
 }
+.team-card .avatar:has(img) { position: relative; overflow: hidden; }
+.team-card .avatar img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center top; transition: transform 0.6s var(--ease); }
+.team-card:hover .avatar img { transform: scale(1.04); }
 .team-card .body { padding: var(--space-4); }
 .team-card h3 { font-size: 1.02rem; margin-bottom: 0.15rem; }
 .team-card .role { font-size: 0.82rem; color: var(--color-muted); margin-bottom: var(--space-3); display: block; }

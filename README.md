@@ -1,38 +1,70 @@
 # Underwood Dentist — Site Rebuild
 
-A clean, hand-built static site for "Dentist at Underwood," rebuilt from
-scratch from a browser-saved snapshot of `dentistatunderwood.com.au`. No
-framework, no build step, no WordPress/Elementor — just semantic HTML, one
-CSS file, and one JS file.
+A clean, hand-built **multi-page** static site for "Dentist at Underwood,"
+mirroring the page depth and service catalogue of brisbanedental.com.au. No
+framework, no build step, no WordPress/Elementor — semantic HTML, one CSS
+file, and a small set of JS files.
 
 ## Structure
 
 ```
-index.html            the whole page
+index.html                  homepage
+about.html                  real team bios (sourced from dentistatunderwood.com.au/about-us/)
+contact.html                booking form + map
+emergency.html               emergency triage content + FAQs
+services.html                full service directory (all categories)
+blog.html                    4 articles (inline expand, no separate post files)
+
+services/
+  general-dentistry.html     category hub -> 10 leaf pages
+  cosmetic-dentistry.html    category hub -> 4 leaf pages
+  orthodontic.html            category hub -> 2 leaf pages
+  implants.html                category hub -> 2 leaf pages
+  <service>.html              22 individual leaf pages (one per treatment)
+
+anxiety-solutions/
+  iv-sedation.html
+  general-anesthesia.html
+
+partials/
+  header.html                 site header + desktop mega-menu + mobile drawer
+  footer.html                 footer, map embed, social links
+
 assets/
-  css/style.css        design system + all styles (custom properties, components)
-  js/main.js            nav, mobile drawer, scroll-reveal, carousel, contact form
-  images/               all photos, case gallery, and health-fund logos
-legacy/                 the original Elementor-era files, kept for reference
-  index-original.html
-  css/, js/             the ~50 original stylesheets / ~40 scripts (unused now)
-  maps.html
+  css/style.css                design system + every component style
+  js/main.js                    nav, mobile drawer, mega-menu, scroll-reveal,
+                                 carousel, contact form — exposes window.initSite()
+  js/include.js                  fetches partials/header.html + footer.html into
+                                  #site-header / #site-footer, then calls initSite()
+  images/                        all real clinic/team photos, no stock photography
+
+legacy/                         original Elementor-era files, kept for reference only
 ```
 
-Nothing in `legacy/` is loaded by `index.html` — it's there in case you want
-to compare against the original or recover a specific bit of copy. Safe to
-delete if you don't need it.
+## Editing locally — **must be served over HTTP**
 
-## Editing locally
-
-No build step. Open `index.html` directly, or serve it (recommended, so the
-Google Maps iframe and relative paths behave exactly like production):
+Every page is root-relative (`/assets/...`, `/services/...`) and the header/
+footer are injected at runtime via `fetch()`. That means `file://` will NOT
+work — `fetch()` can't load the partials without a server. Always run:
 
 ```bash
 cd underwood-dentist-site
 python3 -m http.server 8080
 # open http://localhost:8080
 ```
+
+### Why partials instead of copy-pasting the header into 35 files
+
+The nav has ~30 items (full services mega-menu + anxiety-solutions dropdown).
+`partials/header.html` and `partials/footer.html` are the single source of
+truth; `assets/js/include.js` fetches them into `#site-header` /
+`#site-footer` placeholders on every page, then calls `window.initSite()`
+(defined in `main.js`) once they're in the DOM — which is why `main.js` is
+loaded *before* `include.js` in every page's `<script>` tags, but its nav/
+dropdown logic only actually runs after injection completes.
+
+**To change the nav, header, or footer: edit the two files in `partials/`
+once.** Don't touch the markup in individual pages.
 
 ### Design system
 
@@ -49,64 +81,65 @@ Everything visual is driven by CSS custom properties at the top of
 
 Deliberately avoided: pill-shaped glowing buttons, a repeated icon-in-circle
 pattern, a gradient blob behind the hero, floating badge cards, and an
-auto-scrolling logo marquee — all common "obviously AI-generated" landing
-page tells. Buttons are flat, cards use hairline borders instead of drop
-shadows, section labels are a plain underlined caption instead of a
-bullet+eyebrow, and services are a numbered list rather than a grid of
-identical icon cards.
+auto-scrolling logo marquee. Buttons are flat, cards use hairline borders
+instead of drop shadows.
 
-Fonts load from Google Fonts via CDN with a system-font fallback stack, so
-the page still reads fine offline — it just won't have the exact webfonts.
+Component classes added for the multi-page rebuild: `.mega` (desktop
+mega-menu), `.breadcrumbs`, `.page-hero` / `.page-hero-grid`, `.prose`
+(article typography), `.content-layout` (main + sticky sidebar),
+`.side-card`, `.faq-list` / `.faq-item` (native `<details>` accordion),
+`.hub-grid` / `.hub-card`, `.category-block`, `.team-grid` / `.team-card`,
+`.blog-grid` / `.blog-card`, `.emergency-banner`, `.info-grid`.
 
-### Sections (in order)
+### Page template for leaf service pages
 
-Header (sticky, dropdown nav + mobile drawer) → Hero → Pull-quote intro →
-2 alternating feature rows (how we treat people / kids) → About (with a
-payment-plans callout folded in, instead of its own repeated section) →
-Services (12-item numbered list, two columns) → **Inside the Clinic** — a
-real photo gallery using the actual clinic photos (`assets/images/home-*`,
-plus the sterilisation and curing-light shots), laid out as an asymmetric
-grid with a couple of captioned tiles, not a 4-up card grid → Smile
-transformation case carousel → Health-fund logos (static row, no marquee) →
-Appointment/contact (info + form) → Footer (links, hours, map, social).
+Every individual treatment page (e.g. `services/dental-fillings.html`,
+`anxiety-solutions/iv-sedation.html`) follows the same shape — copy an
+existing one as a starting point for a new service:
 
-### The "Inside the Clinic" gallery
+1. Breadcrumbs (`Home / Category / Page`)
+2. `.page-hero-grid` — heading, lead, booking CTA, real clinic photo
+3. `.content-layout` — two columns:
+   - `.prose` article: what it is, what's involved, a `.faq-list` accordion
+   - `.side-card`: quick facts, booking CTA, related-service links
+4. `.emergency-banner` closing CTA
 
-This is the real, non-generic part — it uses every actual clinic/team photo
-that came with the original site (no stock photography swapped in). If you
-have more real photos of the space, team, or equipment, drop them into
-`assets/images/` and add a `<figure>` to `.clinic-gallery` in `index.html`;
-the grid uses CSS `grid-auto-flow: dense` so odd-sized additions just slot
-in. Use the `g-wide` / `g-tall` / `g-big` classes on a `<figure>` to make a
-particular photo span more than one cell.
+### Team photos
+
+`about.html` and the homepage team preview use `.avatar` initials
+placeholders (gradient background + initials) for the 4 dentists, because no
+real headshots were available at build time. Bios, credentials and quotes
+are real, sourced from the live about-us page. **Swap in real headshots
+when available** — replace the `.avatar` div's initials markup with an
+`<img>` in each `.team-card`.
 
 ### The appointment form
 
-`#appointment-form` has no backend. On submit, `assets/js/main.js` builds a
-`mailto:` link from the filled-in fields and opens the visitor's email
-client with the message pre-filled. For production, wire the `<form>` up to
-a real service instead (e.g. [Formspree](https://formspree.io),
+`#appointment-form` (used on `contact.html` and the homepage) has no
+backend. On submit, `assets/js/main.js` builds a `mailto:` link from the
+filled-in fields and opens the visitor's email client with the message
+pre-filled. For production, wire the `<form>` up to a real service instead
+(e.g. [Formspree](https://formspree.io),
 [Netlify Forms](https://docs.netlify.com/forms/setup/)) and remove the JS
 `preventDefault()`/mailto logic.
 
 ### Map
 
-The footer map is a no-API-key Google Maps embed
-(`https://www.google.com/maps?q=...&output=embed`) — the standard "legacy"
-embed format, needs no setup. If Google ever deprecates it, swap in a proper
+The footer map and the full-width map on `contact.html` are both no-API-key
+Google Maps embeds (`https://www.google.com/maps?q=...&output=embed`). If
+Google ever deprecates it, swap in a proper
 [Maps Embed API](https://developers.google.com/maps/documentation/embed/get-started)
 iframe with an API key.
 
 ## Known gaps / things to add
 
-- **Service detail pages** — nav links and the services list currently point
-  at `#services` on the same page. Build real sub-pages if you want them
-  (e.g. `/services/veneers.html`) and update those `href`s.
-- **Real case-gallery captions** — the carousel reuses generic alt text
-  ("Dental treatment case N"); add real before/after descriptions if you
-  have them.
-- **Blog / FAQ / Smile Gallery** — present as nav items on the original
-  site but not rebuilt here.
+- **Real team headshots** — see "Team photos" above.
+- **Real case-gallery captions** — the homepage carousel reuses generic alt
+  text ("Dental treatment case N"); add real before/after descriptions if
+  you have them.
+- **Blog posts as real content** — `blog.html` uses inline `<details>`
+  expansion for all 4 articles rather than separate post pages; split them
+  out if the blog grows.
 - A few health-fund logos (notably ClearCorrect, which is white-on-transparent)
   are faint against the light logo-row background — swap in a dark/colour
   variant if you have one.

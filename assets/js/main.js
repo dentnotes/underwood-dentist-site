@@ -127,9 +127,61 @@
 
   }
 
+  /* ---------- Google reviews (homepage) ---------- */
+  const STAR = '<svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 1.5l2.6 5.4 5.9.8-4.3 4.1 1 5.9L10 14.9l-5.2 2.8 1-5.9L1.5 7.7l5.9-.8z"/></svg>';
+  const stars = (n) => {
+    const full = Math.round(n);
+    return `<span class="stars" role="img" aria-label="${n} out of 5 stars">${STAR.repeat(full)}${STAR.replace("<svg", '<svg class="off"').repeat(5 - full)}</span>`;
+  };
+  const esc = (str) => String(str || "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+
+  async function loadReviews() {
+    const section = document.getElementById("google-reviews");
+    if (!section) return;
+    try {
+      const res = await fetch("/api/reviews");
+      if (!res.ok) return;
+      const data = await res.json();
+      if (!data.reviews || !data.reviews.length) return;
+
+      section.querySelector("[data-reviews-rating]").textContent = Number(data.rating).toFixed(1);
+      section.querySelector("[data-reviews-stars]").outerHTML = stars(data.rating);
+      section.querySelector("[data-reviews-total]").textContent = data.total;
+      section.querySelector("[data-reviews-link]").href = data.url;
+      section.querySelector("[data-reviews-list]").innerHTML = data.reviews.map((r) => `
+        <article class="review-card">
+          ${stars(r.rating)}
+          <p class="review-text">${esc(r.text)}</p>
+          <button type="button" class="review-more" hidden>Read more</button>
+          <a class="review-author" href="${esc(r.authorUrl)}" target="_blank" rel="noopener">
+            ${r.authorPhoto ? `<img src="${esc(r.authorPhoto)}" alt="" width="40" height="40" loading="lazy" referrerpolicy="no-referrer">` : ""}
+            <span><strong>${esc(r.author)}</strong><small>${esc(r.time)}</small></span>
+          </a>
+        </article>`).join("");
+      section.hidden = false;
+
+      // "Read more" only on reviews that are actually cut off
+      section.querySelectorAll(".review-card").forEach((card) => {
+        const text = card.querySelector(".review-text");
+        const more = card.querySelector(".review-more");
+        if (text.scrollHeight > text.clientHeight + 2) {
+          more.hidden = false;
+          more.addEventListener("click", () => {
+            const open = card.classList.toggle("expanded");
+            more.textContent = open ? "Show less" : "Read more";
+          });
+        }
+      });
+      section.querySelectorAll("[data-reveal]").forEach((el) => el.classList.add("is-visible"));
+    } catch (err) {
+      // Leave the section hidden; reviews are a nice-to-have
+    }
+  }
+
   window.initSite = initSite;
 
   // The header and footer are part of each page's HTML (inlined by
   // scripts/build.py), so the site can start as soon as this deferred script runs.
   initSite();
+  loadReviews();
 })();

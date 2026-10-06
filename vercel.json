@@ -59,11 +59,6 @@
       "permanent": true
     },
     {
-      "source": "/home2",
-      "destination": "/",
-      "permanent": true
-    },
-    {
       "source": "/services/wrinkle-treatments",
       "destination": "/services",
       "permanent": true

@@ -55,6 +55,11 @@ PAGES = {
     "/blog": ("Dental Health Blog | Dentist at Underwood",
               "Plain-English dental advice from the team at Dentist at Underwood: how often to see a dentist, "
               "kids' first teeth, whitening safety and knocked-out teeth."),
+    "/home2": ("Dentist at Underwood | Homepage test (team hero)",
+               "Test version of the homepage with the team photo as the opening banner."),
+    "/privacy-policy": ("Privacy Policy | Dentist at Underwood",
+                        "How Dentist at Underwood collects, uses, stores and protects your personal information, "
+                        "in line with the Australian Privacy Principles."),
     "/404": ("Page not found | Dentist at Underwood",
              "The page you were looking for doesn't exist. Find our services, book online or call Dentist at "
              "Underwood on (07) 3822 9266."),
@@ -148,7 +153,7 @@ DENTIST_ID = SITE + "/#dentist"
 WEBSITE_ID = SITE + "/#website"
 FULL_BUSINESS_PAGES = {"/", "/about", "/contact", "/emergency"}
 # Hidden pages: still reachable by direct link, but not linked, indexed or in the sitemap.
-NOINDEX = {"/404", "/services/braces"}
+NOINDEX = {"/404", "/services/braces", "/home2"}
 
 BUSINESS = {
     "@type": "Dentist",

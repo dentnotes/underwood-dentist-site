@@ -160,7 +160,7 @@
 }
 </script>
 <!-- /seo -->
-<link rel="stylesheet" href="/assets/css/style.css?v=e7a4a3513a">
+<link rel="stylesheet" href="/assets/css/style.css?v=c7baa40579">
 </head>
 <body>
 
@@ -628,6 +628,30 @@
     </div>
   </section>
 
+  <!-- ======================= GOOGLE REVIEWS ======================= -->
+  <!-- Filled in by main.js from /api/reviews; stays hidden if reviews can't be loaded -->
+  <section class="reviews" id="google-reviews" hidden>
+    <div class="container">
+      <div class="section-head split" data-reveal>
+        <div>
+          <span class="label">Patient reviews</span>
+          <h2 style="margin:0;">Kind words from <em>our patients</em></h2>
+        </div>
+        <div class="reviews-summary">
+          <div class="reviews-score"><strong data-reviews-rating></strong><span class="stars" data-reviews-stars></span></div>
+          <p>Based on <span data-reviews-total></span> Google reviews</p>
+        </div>
+      </div>
+      <div class="reviews-track" data-reviews-list data-reveal></div>
+      <div class="reviews-footer" data-reveal>
+        <span class="reviews-attribution">Reviews from <span class="google-wordmark" aria-label="Google"><span>G</span><span>o</span><span>o</span><span>g</span><span>l</span><span>e</span></span></span>
+        <a class="btn-link" data-reviews-link href="#" target="_blank" rel="noopener">Read all reviews on Google
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </a>
+      </div>
+    </div>
+  </section>
+
   <!-- ======================= SERVICES TEASER ======================= -->
   <section style="background:var(--color-surface-alt);">
     <div class="container">
@@ -669,26 +693,11 @@
   <section class="affiliations">
     <div class="container">
       <div class="section-head" data-reveal>
-        <span class="label">Health funds &amp; partners</span>
-        <h2>We work with your health fund</h2>
+        <span class="label">Health fund claims</span>
+        <h2>Claim on the spot with <em>HICAPS</em></h2>
       </div>
       <div class="logo-row" data-reveal>
-        <img src="/assets/images/1200px-AAMI_logo.svg-1.png" alt="AAMI" loading="lazy" width="1330" height="418" decoding="async">
-        <img src="/assets/images/smile-logo-2.png" alt="Smile.com.au" loading="lazy" width="610" height="247" decoding="async">
-        <img src="/assets/images/apia.webp" alt="Apia" loading="lazy" width="350" height="370" decoding="async">
-        <img src="/assets/images/suncorp.png" alt="Suncorp" loading="lazy" width="500" height="307" decoding="async">
-        <img src="/assets/images/ada-federal-1-1.png" alt="Australian Dental Association" loading="lazy" width="298" height="169" decoding="async">
-        <img src="/assets/images/medibank-logo-png_seeklogo-458226.png" alt="Medibank" loading="lazy" width="600" height="600" decoding="async">
-        <img src="/assets/images/HICAPS-2.webp" alt="HICAPS" loading="lazy" width="667" height="347" decoding="async">
-        <img src="/assets/images/Invisalign.png" alt="Invisalign" loading="lazy" width="383" height="131" decoding="async">
-        <img src="/assets/images/national-dental-plan-1.png" alt="National Dental Plan" loading="lazy" width="202" height="111" decoding="async">
-        <img src="/assets/images/NIB-logo-large-1.png" alt="nib" loading="lazy" width="484" height="241" decoding="async">
-        <img src="/assets/images/cbhs.png" alt="CBHS" loading="lazy" width="338" height="119" decoding="async">
-        <img src="/assets/images/Australian_Unity.webp" alt="Australian Unity" loading="lazy" width="771" height="462" decoding="async">
-        <img src="/assets/images/Police_Health_Fund_Logo.png" alt="Police Health Fund" loading="lazy" width="744" height="299" decoding="async">
-        <img src="/assets/images/HBF_Health_Insurance_Supplied_1800x1000.png" alt="HBF" loading="lazy" width="1800" height="1000" decoding="async">
-        <img src="/assets/images/GU-Health.png" alt="GU Health" loading="lazy" width="200" height="200" decoding="async">
-        <img src="/assets/images/united-health-insurance-2.png" alt="Union Health" loading="lazy" width="353" height="143" decoding="async">
+        <img src="/assets/images/hicaps-logo.webp" alt="HICAPS" loading="lazy" width="619" height="173" decoding="async">
       </div>
     </div>
   </section>
@@ -764,7 +773,7 @@
 
     <div class="footer-bottom">
       <span>© 2026 Underwood Dentist. All rights reserved.</span>
-      <span><a href="/contact">Privacy Policy</a></span>
+      <span><a href="/privacy-policy">Privacy Policy</a></span>
     </div>
   </div>
 </footer>
@@ -772,8 +781,12 @@
 <button class="to-top" aria-label="Back to top">
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/></svg>
 </button>
+
+<!-- Birdeye chat widget -->
+<div id="bf-revz-widget-2023239238"></div>
+<script defer type="text/javascript" src="https://getbirdeye.com.au/embed/v6/309103/1/2023239238/0bd449220468d81d4567aefce02098a462bceb0bf2a20b16"></script>
 <!-- /site-footer -->
 
-<script src="/assets/js/main.js?v=c15d93ef6a" defer></script>
+<script src="/assets/js/main.js?v=70b25e4cb5" defer></script>
 </body>
 </html>

@@ -690,7 +690,7 @@ section { padding-block: var(--space-8); }
 
 /* ------------------------------ Back to top ------------------------------ */
 .to-top {
-  position: fixed; bottom: var(--space-5); right: var(--space-5);
+  position: fixed; bottom: 116px; right: 30px; /* above the Birdeye chat bubble */
   width: 44px; height: 44px;
   border-radius: 50%;
   background: var(--color-ink);
@@ -826,6 +826,8 @@ section { padding-block: var(--space-8); }
   color: var(--color-ink-soft);
 }
 .prose ul li::before { content: "→"; position: absolute; left: 0; color: var(--color-gold-dark); font-weight: 600; }
+.prose a { color: var(--color-ink); border-bottom: 1px solid var(--color-gold); }
+.prose a:hover { color: var(--color-gold-dark); }
 
 .content-layout { display: grid; gap: var(--space-8); }
 @media (min-width: 960px) { .content-layout { grid-template-columns: 1fr 320px; } }
@@ -1051,3 +1053,81 @@ section { padding-block: var(--space-8); }
 .cta-band .cta-actions { display: flex; flex-wrap: wrap; justify-content: center; gap: var(--space-3); margin-top: var(--space-7); }
 .cta-band .btn-primary { background: #fff; color: var(--color-ink); }
 .cta-band .btn-primary:hover { background: var(--color-gold-soft); color: var(--color-ink); }
+
+
+/* ------------------------------ Team hero (test homepage /home2) ------------------------------ */
+.team-hero { position: relative; overflow: hidden; padding: 0; aspect-ratio: 2400 / 1420; max-height: 920px; width: 100%; display: flex; }
+.team-hero__bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center bottom; }
+.team-hero::before { content: ""; position: absolute; inset: 0; z-index: 1; background: linear-gradient(180deg, rgba(248, 244, 238, 0.85) 0%, rgba(248, 244, 238, 0.45) 30%, rgba(248, 244, 238, 0) 55%); }
+.team-hero__copy { position: relative; z-index: 2; text-align: center; padding-top: clamp(var(--space-7), 6vw, var(--space-9)); }
+.team-hero__copy .label { justify-content: center; }
+.team-hero__copy .label::after { content: ""; width: 28px; height: 1px; background: var(--color-gold); flex-shrink: 0; }
+.team-hero__copy h1 { max-width: 16ch; margin-inline: auto; font-size: clamp(2.6rem, 1.4rem + 3.6vw, 4.6rem); }
+.team-hero__actions { display: flex; flex-wrap: wrap; justify-content: center; gap: var(--space-3); margin-top: var(--space-6); }
+.team-hero__actions .btn-ghost { background: rgba(255, 255, 255, 0.55); backdrop-filter: blur(6px); }
+@media (max-width: 759px) {
+  /* Phones: text first, photo below it rather than behind it */
+  .team-hero { flex-direction: column; aspect-ratio: auto; max-height: none; }
+  .team-hero::before { display: none; }
+  /* Zoom past the empty backdrop at the top so the faces read at phone size */
+  .team-hero__bg { position: relative; inset: auto; order: 2; width: 100%; height: auto; margin-top: -22vw; }
+  .team-hero__copy { background: var(--color-surface); position: relative; z-index: 2; }
+  .team-hero__copy { padding-bottom: var(--space-6); }
+}
+
+/* ------------------------------ Payment options (about page) ------------------------------ */
+.payment-strip { display: grid; gap: var(--space-6); align-items: center; padding: var(--space-7) var(--space-6); border: 1px solid var(--color-border); border-radius: var(--radius-xl); background: rgba(255, 255, 255, 0.55); }
+@media (min-width: 900px) { .payment-strip { padding: var(--space-7) var(--space-8); } }
+.payment-strip h2 { font-size: clamp(1.8rem, 1.3rem + 1.4vw, 2.5rem); }
+.payment-strip p { margin-top: var(--space-3); max-width: 46ch; }
+.payment-logos { display: flex; flex-wrap: wrap; gap: var(--space-4); align-items: center; }
+.payment-logos img { height: 86px; width: auto; padding: 0.9rem 1.3rem; background: #fff; border: 1px solid var(--color-border); border-radius: var(--radius-md); }
+@media (max-width: 599px) { .payment-logos { gap: var(--space-3); } .payment-logos img { height: 62px; padding: 0.6rem 0.85rem; } }
+
+/* ------------------------------ Partners strip (homepage) ------------------------------ */
+.affiliations .section-head { margin-inline: auto; text-align: center; }
+.affiliations .label { justify-content: center; }
+.affiliations .label::after { content: ""; width: 28px; height: 1px; background: var(--color-gold); flex-shrink: 0; }
+.affiliations .logo-row { justify-content: center; gap: var(--space-7) var(--space-9); }
+.affiliations .logo-row img { height: 64px; max-width: 280px; filter: grayscale(1) opacity(0.75); }
+@media (max-width: 599px) { .affiliations .logo-row img { height: 52px; } }
+
+/* ------------------------------ Google reviews (homepage) ------------------------------ */
+.reviews { background: var(--color-surface-alt); }
+.reviews-summary { text-align: right; }
+.reviews-score { display: flex; align-items: center; gap: var(--space-3); justify-content: flex-end; }
+.reviews-score strong { font-family: var(--font-display); font-weight: 300; font-size: 3rem; line-height: 1; color: var(--color-ink); }
+.reviews-summary p { font-size: 0.82rem; margin-top: var(--space-2); color: var(--color-muted); }
+.stars { display: inline-flex; gap: 2px; color: #c9a227; }
+.stars svg { width: 18px; height: 18px; fill: currentColor; }
+.stars svg.off { fill: #ddd2c1; }
+.reviews-track {
+  display: flex; gap: var(--space-4);
+  overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none;
+  padding-bottom: var(--space-2);
+}
+.reviews-track::-webkit-scrollbar { display: none; }
+.review-card {
+  flex: 0 0 min(86%, 360px); scroll-snap-align: start;
+  display: flex; flex-direction: column; gap: var(--space-4);
+  padding: var(--space-6);
+  background: rgba(255, 255, 255, 0.7);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+}
+.review-text { font-size: 0.96rem; line-height: 1.7; display: -webkit-box; -webkit-line-clamp: 7; -webkit-box-orient: vertical; overflow: hidden; }
+.review-card.expanded .review-text { -webkit-line-clamp: unset; display: block; }
+.review-more { align-self: flex-start; background: none; border: 0; padding: 0; font-size: 0.7rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--color-gold-dark); border-bottom: 1px solid var(--color-gold); }
+.review-author { display: flex; align-items: center; gap: var(--space-3); margin-top: auto; padding-top: var(--space-4); border-top: 1px solid var(--color-border); }
+.review-author img { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; }
+.review-author strong { display: block; font-weight: 500; font-size: 0.92rem; color: var(--color-ink); }
+.review-author small { font-size: 0.78rem; color: var(--color-muted); }
+.reviews-footer { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: var(--space-4); margin-top: var(--space-6); }
+.reviews-attribution { font-size: 0.82rem; color: var(--color-muted); display: inline-flex; align-items: center; gap: 0.4rem; }
+/* Google attribution in Google's brand colours */
+.google-wordmark { font-family: Arial, Helvetica, sans-serif; font-weight: 500; font-size: 0.95rem; letter-spacing: -0.01em; }
+.google-wordmark span:nth-child(1), .google-wordmark span:nth-child(4) { color: #4285f4; }
+.google-wordmark span:nth-child(2), .google-wordmark span:nth-child(6) { color: #ea4335; }
+.google-wordmark span:nth-child(3) { color: #fbbc05; }
+.google-wordmark span:nth-child(5) { color: #34a853; }
+@media (max-width: 759px) { .reviews-summary { text-align: left; } .reviews-score { justify-content: flex-start; } }

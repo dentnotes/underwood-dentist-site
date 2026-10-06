@@ -11,7 +11,7 @@ It is safe to run repeatedly. For every page it:
   - rewrites internal links to clean URLs (/services/cerec, not .html)
   - sets the <title> and meta description from PAGES below
   - writes a <!-- seo --> block in <head>: canonical, robots, Open Graph,
-    Twitter card, icons, preconnects and JSON-LD structured data
+    Twitter card, icons, preconnects, Vercel Analytics and JSON-LD structured data
   - adds width/height, lazy loading and decoding hints to images
   - adds srcset for images that have an -800.webp variant
   - cache-busts style.css and main.js with a content hash
@@ -420,6 +420,9 @@ def head_block(s, path, title, desc, lcp_src):
     ]
     if path == "/":
         lines.append('<link rel="preload" as="image" href="/assets/video/hero-bg-poster.jpg" fetchpriority="high">')
+    # Vercel Web Analytics (static-site setup; enable Analytics in the Vercel project)
+    lines += ['<script>window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };</script>',
+              '<script defer src="/_vercel/insights/script.js"></script>']
     if path not in NOINDEX:
         lines.append('<script type="application/ld+json">\n' + json_ld(s, path, url, title, desc, image) + "\n</script>")
     lines.append("<!-- /seo -->")

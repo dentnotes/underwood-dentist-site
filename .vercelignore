@@ -11,8 +11,6 @@ assets/underwood clinic photos */
 
 
 # Source/tooling, not part of the website (header/footer are inlined by scripts/build.py)
-legacy/
 partials/
 scripts/
 README.md
-package-lock.json

@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://underwood-dentist-site.vercel.app/sitemap.xml

@@ -5,9 +5,10 @@
     const header = document.querySelector(".site-header");
 
     /* ---------- Mark active nav link ---------- */
-    const path = window.location.pathname.replace(/\/index\.html$/, "/") || "/";
+    const clean = (p) => p.replace(/\/index(\.html)?$/, "/").replace(/\.html$/, "") || "/";
+    const path = clean(window.location.pathname);
     document.querySelectorAll("[data-nav]").forEach((a) => {
-      if (a.getAttribute("data-nav") === path) a.classList.add("is-active");
+      if (clean(a.getAttribute("data-nav")) === path) a.classList.add("is-active");
     });
 
     /* ---------- Sticky header shadow + back-to-top visibility ---------- */
@@ -101,7 +102,7 @@
             }
           });
         },
-        { threshold: 0.15, rootMargin: "0px 0px -40px 0px" }
+        { threshold: 0, rootMargin: "0px 0px -40px 0px" }
       );
       revealEls.forEach((el, i) => {
         el.style.transitionDelay = `${Math.min(i % 4, 3) * 80}ms`;
@@ -124,37 +125,11 @@
     prevBtn?.addEventListener("click", () => scrollByCard(-1));
     nextBtn?.addEventListener("click", () => scrollByCard(1));
 
-    /* ---------- Appointment / contact form (static demo: opens mail client) ---------- */
-    const form = document.querySelector("#appointment-form");
-    form?.addEventListener("submit", (e) => {
-      e.preventDefault();
-      const data = new FormData(form);
-      const name = (data.get("name") || "").toString().trim();
-      const phone = (data.get("phone") || "").toString().trim();
-      const email = (data.get("email") || "").toString().trim();
-      const date = (data.get("date") || "").toString().trim();
-      const message = (data.get("message") || "").toString().trim();
-
-      const subject = `Appointment request from ${name || "website visitor"}`;
-      const bodyLines = [
-        `Name: ${name}`,
-        `Phone: ${phone}`,
-        `Email: ${email}`,
-        date ? `Preferred date: ${date}` : null,
-        "",
-        message || "(no additional message)",
-      ].filter(Boolean);
-
-      const mailto = `mailto:info@dentistatunderwood.com.au?subject=${encodeURIComponent(
-        subject
-      )}&body=${encodeURIComponent(bodyLines.join("\n"))}`;
-
-      const successEl = document.querySelector(".form-success");
-      successEl?.classList.add("show");
-      window.location.href = mailto;
-      form.reset();
-    });
   }
 
   window.initSite = initSite;
+
+  // The header and footer are part of each page's HTML (inlined by
+  // scripts/build.py), so the site can start as soon as this deferred script runs.
+  initSite();
 })();

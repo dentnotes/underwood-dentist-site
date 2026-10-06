@@ -13,3 +13,4 @@ assets/video/*.MP4
 # Original clinic photo shoot (RAW + full-res); the site uses the cropped
 # copies in assets/images/clinic-*.jpg
 assets/underwood clinic photos */
+

@@ -8,3 +8,11 @@ assets/video/1005.mp4
 # Original clinic photo shoot (incl. ~70 MB RAW files); the site uses the
 # cropped copies in assets/images/clinic-*.jpg
 assets/underwood clinic photos */
+
+
+# Source/tooling, not part of the website (header/footer are inlined by scripts/build.py)
+legacy/
+partials/
+scripts/
+README.md
+package-lock.json
